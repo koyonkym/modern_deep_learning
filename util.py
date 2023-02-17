@@ -137,5 +137,34 @@ def gradb(t, y):
     return (t - y).sum(axis=0)
 
 
+def get_spiral():
+    radius = np.linspace(1, 10, 100)
+    thetas = np.empty((6, 100))
+    for i in range(6):
+        start_angle = np.pi * i / 3.0
+        end_angle = start_angle + np.pi / 2
+        points = np.linspace(start_angle, end_angle, 100)
+        thetas[i] = points
+
+    # convert into cartesian coordinates
+    x1 = np.empty((6, 100))
+    x2 = np.empty((6, 100))
+    for i in range(6):
+        x1[i] = radius * np.cos(thetas[i])
+        x2[i] = radius * np.sin(thetas[i])
+
+    # inputs
+    X = np.empty((600, 2))
+    X[:, 0] = x1.flatten()
+    X[:, 1] = x2.flatten()
+
+    # add noise
+    X += np.random.randn(600, 2) * 0.5
+
+    # targets
+    Y = np.array([0] * 100 + [1] * 100 + [0] * 100 + [1] * 100 + [0] * 100 + [1] * 100)
+    return X, Y
+
+
 if __name__ == '__main__':
     linear_benchmark()
